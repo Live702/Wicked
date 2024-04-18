@@ -16,7 +16,7 @@
       "inspectUri": "{wsProtocol}://{url.hostname}:{url.port}/_framework/debug/ws-proxy?browser={browserInspectUri}",
       "applicationUrl": "https://localhost:7084",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "https://consumer.lazymagicdev.click/"
+        "ASPNETCORE_ENVIRONMENT": "https://app.lazymagicdev.click/"
       }
     },
     "https Local": {
@@ -26,7 +26,7 @@
       "inspectUri": "{wsProtocol}://{url.hostname}:{url.port}/_framework/debug/ws-proxy?browser={browserInspectUri}",
       "applicationUrl": "https://localhost:7084",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "https://localhost:5001/,https://consumer.lazymagicdev.click/"
+        "ASPNETCORE_ENVIRONMENT": "https://localhost:5001/,https://app.lazymagicdev.click/"
       }
     },
     "IIS Express Local": {
@@ -34,7 +34,7 @@
       "launchBrowser": true,
       "inspectUri": "{wsProtocol}://{url.hostname}:{url.port}/_framework/debug/ws-proxy?browser={browserInspectUri}",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "https://localhost:5001/,https://consumer.lazymagicdev.click/"
+        "ASPNETCORE_ENVIRONMENT": "https://localhost:5001/,https://app.lazymagicdev.click/"
       }
     },
     "IIS Express Cloud": {
@@ -42,7 +42,7 @@
       "launchBrowser": true,
       "inspectUri": "{wsProtocol}://{url.hostname}:{url.port}/_framework/debug/ws-proxy?browser={browserInspectUri}",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "https://consumer.lazymagicdev.click/"
+        "ASPNETCORE_ENVIRONMENT": "https://app.lazymagicdev.click/"
 
       }
     }
