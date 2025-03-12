@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
 	<PropertyGroup>
-		<TargetFramework>net8.0</TargetFramework>
+		<TargetFramework>net9.0</TargetFramework>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<DebugType>portable</DebugType>
@@ -9,13 +9,22 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<SupportedPlatform Include="browser" />
+	  <EmbeddedResource Include="wwwroot\appConfig.js" />
 	</ItemGroup>
 
 	<ItemGroup>
+		<SupportedPlatform Include="browser" />
 		<PackageReference Include="Microsoft.AspNetCore.Components.Web" />
-		<PackageReference Include="LazyStack.Client.Auth.Cognito" />
-		<PackageReference Include="LazyStack.Blazor.Auth" />
+	</ItemGroup>
+	
+	<ItemGroup>
+		<TrimmerRootAssembly Include="LazyMagic.Shared" />
+	</ItemGroup>
+	
+	<ItemGroup>
+		<PackageReference Include="LazyMagic.Client.Auth.Cognito" />
+		<PackageReference Include="LazyMagic.Blazor.Auth" />
+		<PackageReference Include="MudBlazor" />
 		<ProjectReference Include="..\ViewModels\ViewModels.csproj" />
 	</ItemGroup>
 
