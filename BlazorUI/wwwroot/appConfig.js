@@ -1,5 +1,5 @@
 export const appConfig = {
-    appPath: "/store/",  
+    appPath: "/app/",  
     androidAppUrl: "",
     remoteApiUrl: "https://uptown.lazymagicdev.click/",
     localApiUrl: "https://localhost:5001/",

@@ -9,7 +9,7 @@ Remember to change the NewBaseUrl property to the baseUrl for your App.
 			<PowerShellExe Condition=" '$(PowerShellExe)'=='' ">%WINDIR%\System32\WindowsPowerShell\v1.0\powershell.exe</PowerShellExe>
 			<ReplaceBaseUrlScriptPath>$(MSBuildProjectDirectory)\ReplaceBaseUrl.ps1</ReplaceBaseUrlScriptPath>
 			<IndexHtmlPath>$(PublishDir)wwwroot\index.html</IndexHtmlPath>
-			<NewBaseUrl>/store/</NewBaseUrl>
+			<NewBaseUrl>/app/</NewBaseUrl>
 		</PropertyGroup>
 		<Exec Command="$(PowerShellExe) -NonInteractive -ExecutionPolicy Bypass -File &quot;$(ReplaceBaseUrlScriptPath)&quot; -indexHtmlPath &quot;$(IndexHtmlPath)&quot; -newBaseUrl &quot;$(NewBaseUrl)&quot;" />
 	</Target>

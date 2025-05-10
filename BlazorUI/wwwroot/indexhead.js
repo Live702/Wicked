@@ -2,7 +2,7 @@
 // BlazorUI project. This script is run by the index.html file in the WASMApp and MAUIApp 
 // projects. This allows a single source of truth for both the WASMApp and MAUIApp projects.
 
-document.title = "Store App";
+document.title = "MagicPets App";
 var metaCharset = document.createElement('meta');
 metaCharset.setAttribute('charset', 'utf-8');
 document.head.appendChild(metaCharset);
