@@ -27,7 +27,7 @@ public class SessionViewModel : LzSessionViewModelAuthNotifications, ISessionVie
         {
             var tenantKey = (string?)clientConfig.TenancyConfig["tenantKey"] ?? throw new Exception("Cognito TenancyConfig.tenantKey is null");
             TenantName = AppConfig.TenantName;
-            authProcess.SetAuthenticator(clientConfig.AuthConfigs?["TenantAuth"]!);
+            authProcess.SetAuthenticator(clientConfig.AuthConfigs?["ConsumerAuth"]!);
             authProcess.SetSignUpAllowed(true);
 
             var sessionId = Guid.NewGuid().ToString(); 
