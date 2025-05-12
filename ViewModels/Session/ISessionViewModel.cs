@@ -10,6 +10,7 @@ public interface ISessionViewModel : ILzSessionViewModelAuthNotifications
     PetsViewModel PetsViewModel { get; set; }
     CategoriesViewModel CategoriesViewModel { get; set; }
     TagsViewModel TagsViewModel { get; set; }   
+    PremisesViewModel PremisesViewModel { get; set; }    
 
     public string TenantName { get; set; }
 }

@@ -1,9 +1,13 @@
+@namespace BlazorUI
 @page "/BlurbPage"
-@namespace BlazorUI.Pages
+@inject ISessionsViewModel SessionsViewModel
+@inject NavigationManager NavigationManager
+
 
 <h3>Deployed at - 2025-05-10 343</h3>
 
 <MudButton Variant="Variant.Text" OnClick="@(() => OpenDrawer(Anchor.Bottom))">Bottom</MudButton>
+<Premises />
 
 <MudDrawer @bind-Open="_open"
            Width="100%"
@@ -22,10 +26,16 @@
 </MudDrawer>
 
 @code {
+    
     private bool _open;
     private Anchor _anchor = Anchor.Bottom;
     private string _userText = "";
 
+    protected override async Task OnInitializedAsync()
+    {
+      
+        await base.OnInitializedAsync();
+    }
     private void OpenDrawer(Anchor anchor)
     {
         _open = true;
