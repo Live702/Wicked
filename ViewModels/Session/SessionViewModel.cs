@@ -20,7 +20,8 @@ public class SessionViewModel : LzSessionViewModelAuthNotifications, ISessionVie
         [FactoryInject] IPetsViewModelFactory petsViewModelFactory, // transient
         [FactoryInject] ICategoriesViewModelFactory categoriesViewModelFactory, // transient
         [FactoryInject] ITagsViewModelFactory tagsViewModelFactory, // transient
-        [FactoryInject] IPremisesViewModelFactory premisesViewModelFactory //transient
+        [FactoryInject] IPremisesViewModelFactory premisesViewModelFactory, //transient
+        [FactoryInject] IMessagesViewModelFactory messagesViewModelFactory // singleton
         ) 
         : base(loggerFactory, authProcess, clientConfig, internetConnectivity, messages)  
     {
@@ -46,6 +47,9 @@ public class SessionViewModel : LzSessionViewModelAuthNotifications, ISessionVie
             PremisesViewModel = premisesViewModelFactory?.Create(this) ?? throw new
               ArgumentNullException(nameof(premisesViewModelFactory));
 
+            MessagesViewModel = messagesViewModelFactory?.Create(this) ?? throw new
+              ArgumentNullException(nameof(messagesViewModelFactory));
+
         }
         catch (Exception ex)
         {
@@ -61,6 +65,7 @@ public class SessionViewModel : LzSessionViewModelAuthNotifications, ISessionVie
     public TagsViewModel TagsViewModel { get; set; }
     public string TenantName { get; set; } = string.Empty;
     public PremisesViewModel PremisesViewModel { get; set; }
+    public MessagesViewModel MessagesViewModel { get; set; }
 
     // Base class calls UnloadAsync () when IsSignedIn changes to false
     public override async Task UnloadAsync()

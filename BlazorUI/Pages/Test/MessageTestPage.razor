@@ -1,0 +1,61 @@
+﻿@namespace BlazorUI
+@page "/MessageTestPage"
+@inherits LzComponentBaseAssignViewModel<MessagesViewModel>
+@inject ISessionsViewModel SessionsViewModel
+@inject IMessageViewModelFactory MessageViewModelFactory
+
+<MudTextField @ref="multilineReference" 
+T="string" 
+Label="Multiline Select" 
+Lines="3" 
+Variant="Variant.Outlined" 
+Text="@messageViewModel?.Data?.Body" 
+Adornment="Adornment.End" 
+AdornmentIcon="@Icons.Material.Filled.Api" 
+OnAdornmentClick="@(() => AddMessage(multilineReference!.Text ?? ""))" 
+/>
+
+
+@code {
+    private MudTextField<string>? multilineReference;
+    private string sampleText = "Sample text";
+    private MessageViewModel? messageViewModel;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        ViewModel = SessionsViewModel!.SessionViewModel!.MessagesViewModel;
+
+        // For test we just create a new message each time we use this page
+        var message = new PublicSchema.Message()
+            {
+                Body = "hello claude"
+            };
+        messageViewModel = MessageViewModelFactory.Create(SessionsViewModel.SessionViewModel, ViewModel, message);
+        messageViewModel.State = LzItemViewModelState.New;
+
+        await base.OnInitializedAsync();
+    }
+
+    private async Task AddMessage(string text)
+    {
+        try
+        {
+            messageViewModel!.Data.Body = text;
+            if (string.IsNullOrEmpty(messageViewModel!.Id))
+            {
+
+                await messageViewModel.CreateAsync();
+            } else
+            {
+                await messageViewModel.UpdateAsync();
+            }
+
+        } catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);  
+        }
+        StateHasChanged();
+    }   
+
+}

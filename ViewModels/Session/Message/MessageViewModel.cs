@@ -14,7 +14,8 @@ public class MessageViewModel : LzItemViewModelAuthNotifications<Message,Message
     {
         _sessionViewModel = sessionViewModel;
         ParentViewModel = parentViewModel;
-       _DTOReadAsync = sessionViewModel.Consumer.GetMessageByIdAsync;
+       _DTOReadAsync = sessionViewModel.Public.GetMessageByIdAsync;
+        _DTOCreateAsync = sessionViewModel.Public.CreateMessageAsync;
     }
     private ISessionViewModel _sessionViewModel;
     public override string Id => Data?.Id ?? string.Empty;
