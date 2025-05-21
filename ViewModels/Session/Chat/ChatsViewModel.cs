@@ -9,12 +9,11 @@ public class ChatsViewModel : LzItemsViewModelAuthNotifications<ChatViewModel, C
     public ChatsViewModel(
     [FactoryInject] ILoggerFactory loggerFactory,
     ISessionViewModel sessionViewModel,
-    [FactoryInject] IChatViewModelFactory ChatViewModelFactory) : base(loggerFactory, sessionViewModel)
+    [FactoryInject] IChatViewModelFactory chatViewModelFactory) : base(loggerFactory, sessionViewModel)
     {
         _sessionViewModel = sessionViewModel;
-        ChatViewModelFactory = ChatViewModelFactory;
-        //_DTOReadListAsync = sessionViewModel.Consumer.ListChatsAsync;
-
+        ChatViewModelFactory = chatViewModelFactory;
+        _DTOReadListIdAsync = sessionViewModel.Consumer.ListChatsByBlurbIdAsync;
     }
     private ISessionViewModel _sessionViewModel;
     public IChatViewModelFactory? ChatViewModelFactory { get; init; }
