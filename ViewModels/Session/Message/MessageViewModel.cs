@@ -8,13 +8,13 @@ public class MessageViewModel : LzItemViewModelAuthNotifications<Message,Message
         [FactoryInject] ILoggerFactory loggerFactory,
         ISessionViewModel sessionViewModel,
         ILzParentViewModel parentViewModel,
-        Message Message,
+        Message message,
         bool? isLoaded = null
-        ) : base(loggerFactory, sessionViewModel, Message, model: null, isLoaded)
+        ) : base(loggerFactory, sessionViewModel, message, model: null, isLoaded)
     {
         _sessionViewModel = sessionViewModel;
         ParentViewModel = parentViewModel;
-       _DTOReadAsync = sessionViewModel.Public.GetMessageByIdAsync;
+       _DTOReadAsync = sessionViewModel.Public.ReadMessageByIdAsync;
         _DTOCreateAsync = sessionViewModel.Public.CreateMessageAsync;
     }
     private ISessionViewModel _sessionViewModel;

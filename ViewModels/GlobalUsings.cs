@@ -1,6 +1,4 @@
-﻿global using ConsumerSchema;
-global using PublicSchema;
-global using LazyMagic.Client.Auth;
+﻿global using LazyMagic.Client.Auth;
 global using LazyMagic.Client.Base;
 global using LazyMagic.Client.ViewModels;
 global using Microsoft.Extensions.DependencyInjection;
@@ -12,3 +10,4 @@ global using System.ComponentModel;
 global using ConsumerApi;
 global using PublicApi;
 global using System.Reflection;
+global using WickedSchema;

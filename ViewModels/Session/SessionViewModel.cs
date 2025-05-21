@@ -21,7 +21,9 @@ public class SessionViewModel : LzSessionViewModelAuthNotifications, ISessionVie
         [FactoryInject] ICategoriesViewModelFactory categoriesViewModelFactory, // transient
         [FactoryInject] ITagsViewModelFactory tagsViewModelFactory, // transient
         [FactoryInject] IPremisesViewModelFactory premisesViewModelFactory, //transient
-        [FactoryInject] IMessagesViewModelFactory messagesViewModelFactory // singleton
+        [FactoryInject] IMessagesViewModelFactory messagesViewModelFactory, // singleton
+        [FactoryInject] IBlurbsViewModelFactory blurbsViewModelFactory,
+        [FactoryInject] IChatsViewModelFactory chatsViewModelFactory
         ) 
         : base(loggerFactory, authProcess, clientConfig, internetConnectivity, messages)  
     {
@@ -38,17 +40,26 @@ public class SessionViewModel : LzSessionViewModelAuthNotifications, ISessionVie
 
             Public = new PublicApi.PublicApi(new LzHttpClient(loggerFactory, null, lzHost, sessionId));
 
-            PetsViewModel = petsViewModelFactory?.Create(this) ?? throw new ArgumentNullException(nameof(petsViewModelFactory));
+            PetsViewModel = petsViewModelFactory?.Create(this) 
+                ?? throw new ArgumentNullException(nameof(petsViewModelFactory));
 
-            CategoriesViewModel = categoriesViewModelFactory?.Create(this) ?? throw new ArgumentNullException(nameof(categoriesViewModelFactory));
+            CategoriesViewModel = categoriesViewModelFactory?.Create(this) 
+                ?? throw new ArgumentNullException(nameof(categoriesViewModelFactory));
 
-            TagsViewModel = tagsViewModelFactory?.Create(this) ?? throw new ArgumentNullException(nameof(tagsViewModelFactory));
+            TagsViewModel = tagsViewModelFactory?.Create(this) 
+                ?? throw new ArgumentNullException(nameof(tagsViewModelFactory));
 
-            PremisesViewModel = premisesViewModelFactory?.Create(this) ?? throw new
-              ArgumentNullException(nameof(premisesViewModelFactory));
+            PremisesViewModel = premisesViewModelFactory?.Create(this) 
+                ?? throw new ArgumentNullException(nameof(premisesViewModelFactory));
 
-            MessagesViewModel = messagesViewModelFactory?.Create(this) ?? throw new
-              ArgumentNullException(nameof(messagesViewModelFactory));
+            MessagesViewModel = messagesViewModelFactory?.Create(this) 
+                ?? throw new ArgumentNullException(nameof(messagesViewModelFactory));
+
+            ChatsViewModel = chatsViewModelFactory?.Create(this)
+                ?? throw new ArgumentNullException(nameof(chatsViewModelFactory));
+
+            BlurbsViewModel = blurbsViewModelFactory?.Create(this) 
+                ?? throw new ArgumentNullException(nameof(blurbsViewModelFactory));
 
         }
         catch (Exception ex)
@@ -66,6 +77,8 @@ public class SessionViewModel : LzSessionViewModelAuthNotifications, ISessionVie
     public string TenantName { get; set; } = string.Empty;
     public PremisesViewModel PremisesViewModel { get; set; }
     public MessagesViewModel MessagesViewModel { get; set; }
+    public ChatsViewModel ChatsViewModel { get; set; }
+    public BlurbsViewModel BlurbsViewModel { get; set; }
 
     // Base class calls UnloadAsync () when IsSignedIn changes to false
     public override async Task UnloadAsync()

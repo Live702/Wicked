@@ -8,14 +8,13 @@ public class MessagesViewModel : LzItemsViewModelAuthNotifications<MessageViewMo
     public MessagesViewModel(
     [FactoryInject] ILoggerFactory loggerFactory,
     ISessionViewModel sessionViewModel,
-    [FactoryInject] IMessageViewModelFactory MessageViewModelFactory) : base(loggerFactory, sessionViewModel)
+    [FactoryInject] IMessageViewModelFactory messageViewModelFactory) : base(loggerFactory, sessionViewModel)
     {
         _sessionViewModel = sessionViewModel;
-        MessageViewModelFactory = MessageViewModelFactory;
-        _DTOReadListAsync = sessionViewModel.Consumer.ListMessagesAsync;
-
+        MessageViewModelFactory = messageViewModelFactory;
+        _DTOReadListIdAsync = sessionViewModel.Public.ListMessagesByChatIdAsync;
     }
     private ISessionViewModel _sessionViewModel;
-    public IPetViewModelFactory? MessageViewModelFactory { get; init; }
+    public IMessageViewModelFactory? MessageViewModelFactory { get; init; }
     /// <inheritdoc/>
 }

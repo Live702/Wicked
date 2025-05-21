@@ -14,7 +14,7 @@ public class PremiseViewModel : LzItemViewModelAuthNotifications<Premise, Premis
     {
         _sessionViewModel = sessionViewModel;
         ParentViewModel = parentViewModel;
-        _DTOReadAsync = sessionViewModel.Public.GetPremiseByIdAsync;
+        _DTOReadAsync = sessionViewModel.Public.ReadPremiseByIdAsync;
         _DTOCreateAsync = sessionViewModel.Public.CreatePremiseAsync;
         _DTOUpdateAsync = sessionViewModel.Public.UpdatePremiseAsync;
 

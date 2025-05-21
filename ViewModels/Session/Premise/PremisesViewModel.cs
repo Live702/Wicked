@@ -13,7 +13,7 @@ public class PremisesViewModel : LzItemsViewModelAuthNotifications<PremiseViewMo
     {
         _sessionViewModel = sessionViewModel;
         PremiseViewModelFactory = premiseViewModelFactory;
-        _DTOReadListAsync = sessionViewModel.Public.ListPremisesAsync;
+        _DTOReadListIdAsync = sessionViewModel.Public.ListPremisesByBlurbIdAsync;
 
     }
     private ISessionViewModel _sessionViewModel;
