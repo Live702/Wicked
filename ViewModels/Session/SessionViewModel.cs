@@ -22,8 +22,9 @@ public class SessionViewModel : LzSessionViewModelAuthNotifications, ISessionVie
         [FactoryInject] ITagsViewModelFactory tagsViewModelFactory, // transient
         [FactoryInject] IPremisesViewModelFactory premisesViewModelFactory, //transient
         [FactoryInject] IMessagesViewModelFactory messagesViewModelFactory // singleton
+        ,[FactoryInject] IChatsViewModelFactory chatsViewModelFactory
         //,[FactoryInject] IBlurbsViewModelFactory blurbsViewModelFactory,
-        //[FactoryInject] IChatsViewModelFactory chatsViewModelFactory
+    
         ) 
         : base(loggerFactory, authProcess, clientConfig, internetConnectivity, messages)  
     {
@@ -55,8 +56,8 @@ public class SessionViewModel : LzSessionViewModelAuthNotifications, ISessionVie
             MessagesViewModel = messagesViewModelFactory?.Create(this) 
                 ?? throw new ArgumentNullException(nameof(messagesViewModelFactory));
 
-            //ChatsViewModel = chatsViewModelFactory?.Create(this)
-            //    ?? throw new ArgumentNullException(nameof(chatsViewModelFactory));
+            ChatsViewModel = chatsViewModelFactory?.Create(this)
+                ?? throw new ArgumentNullException(nameof(chatsViewModelFactory));
 
             //BlurbsViewModel = blurbsViewModelFactory?.Create(this) 
             //    ?? throw new ArgumentNullException(nameof(blurbsViewModelFactory));
