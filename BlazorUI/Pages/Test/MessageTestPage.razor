@@ -4,6 +4,7 @@
 @inject ISessionsViewModel SessionsViewModel
 @inject IMessageViewModelFactory MessageViewModelFactory
 
+@*
 <MudTextField @ref="multilineReference" 
 T="string" 
 Label="Multiline Select" 
@@ -27,10 +28,10 @@ OnAdornmentClick="@(() => AddMessage(multilineReference!.Text ?? ""))"
         ViewModel = SessionsViewModel!.SessionViewModel!.MessagesViewModel;
 
         // For test we just create a new message each time we use this page
-        var message = new PublicSchema.Message()
-            {
-                Body = "hello claude"
-            };
+        // var message = new PublicSchema.Message()
+        //     {
+        //         Body = "hello claude"
+        //     };
         messageViewModel = MessageViewModelFactory.Create(SessionsViewModel.SessionViewModel, ViewModel, message);
         messageViewModel.State = LzItemViewModelState.New;
 
@@ -59,3 +60,4 @@ OnAdornmentClick="@(() => AddMessage(multilineReference!.Text ?? ""))"
     }   
 
 }
+*@
