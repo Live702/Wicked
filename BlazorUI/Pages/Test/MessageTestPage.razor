@@ -3,36 +3,40 @@
 @inherits LzComponentBaseAssignViewModel<MessagesViewModel>
 @inject ISessionsViewModel SessionsViewModel
 @inject IMessageViewModelFactory MessageViewModelFactory
+@using WickedSchema
 
-@*
 <MudTextField @ref="multilineReference" 
-T="string" 
-Label="Multiline Select" 
-Lines="3" 
-Variant="Variant.Outlined" 
-Text="@messageViewModel?.Data?.Body" 
-Adornment="Adornment.End" 
-AdornmentIcon="@Icons.Material.Filled.Api" 
-OnAdornmentClick="@(() => AddMessage(multilineReference!.Text ?? ""))" 
+    T="string" 
+    Label="Multiline Select" 
+    Lines="3" 
+    Variant="Variant.Outlined" 
+    Text="@messageViewModel?.Data?.Body" 
+    Adornment="Adornment.End" 
+    AdornmentIcon="@Icons.Material.Filled.Api" 
+    OnAdornmentClick="@(() => AddMessage(multilineReference!.Text ?? ""))" 
 />
-
 
 @code {
     private MudTextField<string>? multilineReference;
     private string sampleText = "Sample text";
     private MessageViewModel? messageViewModel;
 
-
     protected override async Task OnInitializedAsync()
     {
         ViewModel = SessionsViewModel!.SessionViewModel!.MessagesViewModel;
 
-        // For test we just create a new message each time we use this page
-        // var message = new PublicSchema.Message()
-        //     {
-        //         Body = "hello claude"
-        //     };
-        messageViewModel = MessageViewModelFactory.Create(SessionsViewModel.SessionViewModel, ViewModel, message);
+        // Create a new Message DTO for testing
+        var message = new Message
+        {
+            Body = "hello claude"
+            // Add other properties if needed
+        };
+
+        messageViewModel = MessageViewModelFactory.Create(
+            SessionsViewModel.SessionViewModel,
+            ViewModel,
+            message
+        );
         messageViewModel.State = LzItemViewModelState.New;
 
         await base.OnInitializedAsync();
@@ -45,19 +49,17 @@ OnAdornmentClick="@(() => AddMessage(multilineReference!.Text ?? ""))"
             messageViewModel!.Data.Body = text;
             if (string.IsNullOrEmpty(messageViewModel!.Id))
             {
-
                 await messageViewModel.CreateAsync();
-            } else
+            }
+            else
             {
                 await messageViewModel.UpdateAsync();
             }
-
-        } catch (Exception ex)
+        }
+        catch (Exception ex)
         {
-            Console.WriteLine(ex.Message);  
+            Console.WriteLine(ex.Message);
         }
         StateHasChanged();
     }   
-
 }
-*@
