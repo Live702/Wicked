@@ -20,10 +20,7 @@ public class SessionViewModel : LzSessionViewModelAuthNotifications, ISessionVie
         [FactoryInject] IPetsViewModelFactory petsViewModelFactory, // transient
         [FactoryInject] ICategoriesViewModelFactory categoriesViewModelFactory, // transient
         [FactoryInject] ITagsViewModelFactory tagsViewModelFactory, // transient
-        [FactoryInject] IPremisesViewModelFactory premisesViewModelFactory, //transient
-        [FactoryInject] IMessagesViewModelFactory messagesViewModelFactory // singleton
-        ,[FactoryInject] IChatsViewModelFactory chatsViewModelFactory
-        ,[FactoryInject] IBlurbsViewModelFactory blurbsViewModelFactory
+        [FactoryInject] IBlurbsViewModelFactory blurbsViewModelFactory
     
         ) 
         : base(loggerFactory, authProcess, clientConfig, internetConnectivity, messages)  
@@ -50,15 +47,6 @@ public class SessionViewModel : LzSessionViewModelAuthNotifications, ISessionVie
             TagsViewModel = tagsViewModelFactory?.Create(this) 
                 ?? throw new ArgumentNullException(nameof(tagsViewModelFactory));
 
-            PremisesViewModel = premisesViewModelFactory?.Create(this) 
-                ?? throw new ArgumentNullException(nameof(premisesViewModelFactory));
-
-            MessagesViewModel = messagesViewModelFactory?.Create(this) 
-                ?? throw new ArgumentNullException(nameof(messagesViewModelFactory));
-
-            ChatsViewModel = chatsViewModelFactory?.Create(this)
-                ?? throw new ArgumentNullException(nameof(chatsViewModelFactory));
-
             BlurbsViewModel = blurbsViewModelFactory?.Create(this) 
                 ?? throw new ArgumentNullException(nameof(blurbsViewModelFactory));
 
@@ -76,9 +64,6 @@ public class SessionViewModel : LzSessionViewModelAuthNotifications, ISessionVie
     public CategoriesViewModel CategoriesViewModel { get; set; }
     public TagsViewModel TagsViewModel { get; set; }
     public string TenantName { get; set; } = string.Empty;
-    public PremisesViewModel PremisesViewModel { get; set; }
-    public MessagesViewModel MessagesViewModel { get; set; }
-    public ChatsViewModel ChatsViewModel { get; set; }
     public BlurbsViewModel BlurbsViewModel { get; set; }
 
     // Base class calls UnloadAsync () when IsSignedIn changes to false

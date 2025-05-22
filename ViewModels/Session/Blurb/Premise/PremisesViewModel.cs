@@ -6,19 +6,23 @@ using LazyMagic.Client.ViewModels;
 public class PremisesViewModel : LzItemsViewModelAuthNotifications<PremiseViewModel, Premise, PremiseModel>
 {
     public PremisesViewModel(
-    [FactoryInject] ILoggerFactory loggerFactory,
-    ISessionViewModel sessionViewModel,
-    [FactoryInject] IPremiseViewModelFactory premiseViewModelFactory)
+        [FactoryInject] ILoggerFactory loggerFactory,
+        [FactoryInject] IPremiseViewModelFactory premiseViewModelFactory,
+        ISessionViewModel sessionViewModel,
+        BlurbViewModel blurbViewModel
+        )
         : base(loggerFactory, sessionViewModel)
     {
         _sessionViewModel = sessionViewModel;
         PremiseViewModelFactory = premiseViewModelFactory;
         _DTOReadListIdAsync = sessionViewModel.Public.ListPremisesByBlurbIdAsync;
 
+        BlurbViewModel = blurbViewModel;
+
     }
     private ISessionViewModel _sessionViewModel;
     public IPremiseViewModelFactory? PremiseViewModelFactory { get; init; }
-
+    public BlurbViewModel BlurbViewModel { get; init; }
     /// <inheritdoc/>
     public override async Task<(bool, string)> ReadAsync(bool forceload = false)
     => await base.ReadAsync(forceload);

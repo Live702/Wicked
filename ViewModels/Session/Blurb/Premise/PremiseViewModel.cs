@@ -6,6 +6,7 @@ public class PremiseViewModel : LzItemViewModelAuthNotifications<Premise, Premis
 {
     public PremiseViewModel(
         [FactoryInject] ILoggerFactory loggerFactory,
+        [FactoryInject] IChatsViewModelFactory chatsViewModelFactory,
         ISessionViewModel sessionViewModel,
         ILzParentViewModel parentViewModel,
         Premise Premise,
@@ -18,9 +19,11 @@ public class PremiseViewModel : LzItemViewModelAuthNotifications<Premise, Premis
         _DTOCreateAsync = sessionViewModel.Public.CreatePremiseAsync;
         _DTOUpdateAsync = sessionViewModel.Public.UpdatePremiseAsync;
 
+        ChatsViewModel = chatsViewModelFactory?.Create(sessionViewModel, blurbViewModel: null, premiseViewModel: this)
+            ?? throw new ArgumentNullException(nameof(chatsViewModelFactory));
     }
     private ISessionViewModel _sessionViewModel;
     public override string Id => Data?.Id ?? string.Empty;
     public override long UpdatedAt => Data?.UpdateUtcTick ?? long.MaxValue;
-
+    public ChatsViewModel ChatsViewModel { get; set; }
 }
