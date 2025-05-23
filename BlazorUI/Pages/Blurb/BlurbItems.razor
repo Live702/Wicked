@@ -41,6 +41,7 @@ else
         </MudCardContent>
         <MudCardActions>
             <MudButton Variant="Variant.Filled" Color="Color.Default" OnClick="BlurbsReloadAsync">Reload</MudButton>
+            <MudButton Variant="Variant.Filled" Color="Color.Secondary" OnClick="SeedBlurbAsync">Seed Blurb</MudButton>
         </MudCardActions>
     </MudCard>
 }
@@ -89,6 +90,20 @@ else
         if (!success)
         {
             Snackbar!.Add(msg, MudBlazor.Severity.Error);
+        }
+    }
+
+    private async Task SeedBlurbAsync()
+    {
+        try
+        {
+            await SessionsViewModel.SessionViewModel.Public.SeedBlurbAsync();
+            Snackbar?.Add("Seeded a test blurb!", MudBlazor.Severity.Success);
+            await BlurbsReloadAsync();
+        }
+        catch (Exception ex)
+        {
+            Snackbar?.Add($"Error seeding blurb: {ex.Message}", MudBlazor.Severity.Error);
         }
     }
 }
