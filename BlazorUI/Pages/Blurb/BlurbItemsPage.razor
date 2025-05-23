@@ -34,8 +34,8 @@ else
                         <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Primary" OnClick="@(() => DeleteBlurb(context))" />
                     </mudTd>
                     <MudTd DataLabel="Name">@context.Name</MudTd>
-                    <MudTd DataLabel="Created">@(context.CreateUtcTick != 0 ? DateTimeOffset.FromUnixTimeMilliseconds(context.CreateUtcTick).LocalDateTime.ToString() : "N/A")</MudTd>
-                    <MudTd DataLabel="Updated">@(context.UpdateUtcTick != 0 ? DateTimeOffset.FromUnixTimeMilliseconds(context.UpdateUtcTick).LocalDateTime.ToString() : "N/A")</MudTd>
+@*                     <MudTd DataLabel="Created">@(context.CreateUtcTick != 0 ? DateTimeOffset.FromUnixTimeMilliseconds(context.CreateUtcTick).LocalDateTime.ToString() : "N/A")</MudTd>
+                    <MudTd DataLabel="Updated">@(context.UpdateUtcTick != 0 ? DateTimeOffset.FromUnixTimeMilliseconds(context.UpdateUtcTick).LocalDateTime.ToString() : "N/A")</MudTd> *@
                 </RowTemplate>
             </MudTable>
         </MudCardContent>
