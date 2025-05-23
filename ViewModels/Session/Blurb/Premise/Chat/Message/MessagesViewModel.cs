@@ -16,5 +16,12 @@ public class MessagesViewModel : LzItemsViewModelAuthNotifications<MessageViewMo
     }
     private ISessionViewModel _sessionViewModel;
     public IMessageViewModelFactory? MessageViewModelFactory { get; init; }
+
+    public override (MessageViewModel, string) NewViewModel(Message dto)
+        => (MessageViewModelFactory!.Create(_sessionViewModel, this, dto), string.Empty);
+
+    public override async Task<(bool, string)> ReadAsync(bool forceload = false)
+       => await base.ReadAsync(forceload);
+
     /// <inheritdoc/>
 }

@@ -22,7 +22,11 @@ public class ChatsViewModel : LzItemsViewModelAuthNotifications<ChatViewModel, C
 
         _sessionViewModel = sessionViewModel;
         ChatViewModelFactory = chatViewModelFactory;
-        _DTOReadListIdAsync = sessionViewModel.Consumer.ListChatsByBlurbIdAsync;
+
+        if(blurbViewModel != null)
+            _DTOReadListIdAsync = sessionViewModel.Public.ListChatsByBlurbIdAsync;
+        if (premiseViewModel != null)
+            _DTOReadListIdAsync = sessionViewModel.Public.ListChatsByPremiseIdAsync;
 
         BlurbViewModel = blurbViewModel;
         PremiseViewModel = premiseViewModel;
@@ -31,5 +35,9 @@ public class ChatsViewModel : LzItemsViewModelAuthNotifications<ChatViewModel, C
     public IChatViewModelFactory? ChatViewModelFactory { get; init; }
     public BlurbViewModel? BlurbViewModel { get; init; }
     public PremiseViewModel? PremiseViewModel { get; init; }
-    /// <inheritdoc/>
+    public override (ChatViewModel, string) NewViewModel(Chat dto)
+    => (ChatViewModelFactory!.Create(_sessionViewModel, this, dto), string.Empty);
+
+    public override async Task<(bool, string)> ReadAsync(bool forceload = false)
+        => await base.ReadAsync(forceload);
 }

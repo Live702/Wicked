@@ -1,0 +1,94 @@
+﻿@page "/BlurbItems"
+@namespace BlazorUI
+@inherits LzComponentBaseAssignViewModel<BlurbsViewModel>
+@inject ISessionsViewModel SessionsViewModel
+@inject NavigationManager NavigationManager
+@using WickedSchema
+
+<h3>Blurbs</h3>
+@if (ViewModel!.IsLoading)
+{
+    <Busy />
+}
+else
+{
+    <MudCard>
+        <MudCardHeader>
+            <CardHeaderActions>
+                <MudIconButton Icon="@Icons.Material.Filled.Add" Color="Color.Default" OnClick="AddBlurb" />
+            </CardHeaderActions>
+        </MudCardHeader>
+        <MudCardContent>
+            <MudTable T="BlurbModel"
+            Items="@ViewModel.ViewModels.Values.Select(x => x.Data)">
+                <HeaderContent>
+                    <MudTh>Actions</MudTh>
+                    <MudTh>Name</MudTh>
+                    <MudTh>Created</MudTh>
+                    <MudTh>Updated</MudTh>
+                </HeaderContent>
+
+                <RowTemplate>
+                    <mudTd>
+                        <MudIconButton Icon="@Icons.Material.Filled.Edit" Color="Color.Primary" OnClick="@(() => EditBlurb(context))" />
+                        <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Primary" OnClick="@(() => DeleteBlurb(context))" />
+                    </mudTd>
+                    <MudTd DataLabel="Name">@context.Name</MudTd>
+                    <MudTd DataLabel="Created">@(context.CreateUtcTick != 0 ? DateTimeOffset.FromUnixTimeMilliseconds(context.CreateUtcTick).LocalDateTime.ToString() : "N/A")</MudTd>
+                    <MudTd DataLabel="Updated">@(context.UpdateUtcTick != 0 ? DateTimeOffset.FromUnixTimeMilliseconds(context.UpdateUtcTick).LocalDateTime.ToString() : "N/A")</MudTd>
+                </RowTemplate>
+            </MudTable>
+        </MudCardContent>
+        <MudCardActions>
+            <MudButton Variant="Variant.Filled" Color="Color.Default" OnClick="BlurbsReloadAsync">Reload</MudButton>
+        </MudCardActions>
+    </MudCard>
+}
+
+@code {
+    [Inject] ISnackbar? Snackbar { get; set; }
+    private MudTable<BlurbModel> table = new MudTable<BlurbModel>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        ViewModel = SessionsViewModel!.SessionViewModel!.BlurbsViewModel;
+        ViewModel.Clear();
+        var (success, msg) = await ViewModel!.ReadAsync();
+        if (!success)
+        {
+            Snackbar!.Add(msg, MudBlazor.Severity.Error);
+        }
+        await base.OnInitializedAsync();
+    }
+
+    private void AddBlurb()
+    {
+        ViewModel!.EditViewModel = null; // ensure a new BlurbViewModel is created
+        NavigationManager.NavigateTo("BlurbEditPage");
+    }
+
+    private void EditBlurb(BlurbModel blurbModel)
+    {
+        var viewModel = ViewModel!.CurrentViewModel = ViewModel!.EditViewModel = ViewModel.ViewModels[blurbModel.Id];
+        NavigationManager.NavigateTo("BlurbEditPage");
+    }
+
+    private async Task DeleteBlurb(BlurbModel blurbModel)
+    {
+        var viewModel = ViewModel!.ViewModels[blurbModel.Id];
+        var (success, msg) = await viewModel.DeleteAsync();
+        if (!success)
+        {
+            Snackbar!.Add(msg, MudBlazor.Severity.Error);
+        }
+    }
+
+    private async Task BlurbsReloadAsync()
+    {
+        var (success, msg) = await ViewModel!.ReadAsync();
+        if (!success)
+        {
+            Snackbar!.Add(msg, MudBlazor.Severity.Error);
+        }
+    }
+}

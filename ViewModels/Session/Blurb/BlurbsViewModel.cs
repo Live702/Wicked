@@ -24,7 +24,7 @@ public class BlurbsViewModel : LzItemsViewModelAuthNotifications<BlurbViewModel,
         => (BlurbViewModelFactory!.Create(_sessionViewModel, this, dto), string.Empty);
 
     public override async Task<(bool, string)> ReadAsync(bool forceload = false)
-    => await base.ReadAsync(forceload);
+        => await base.ReadAsync(forceload);
 
     /// <inheritdoc/>
 }

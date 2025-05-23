@@ -18,48 +18,16 @@ public class PremisesViewModel : LzItemsViewModelAuthNotifications<PremiseViewMo
         _DTOReadListIdAsync = sessionViewModel.Public.ListPremisesByBlurbIdAsync;
 
         BlurbViewModel = blurbViewModel;
-
     }
     private ISessionViewModel _sessionViewModel;
     public IPremiseViewModelFactory? PremiseViewModelFactory { get; init; }
     public BlurbViewModel BlurbViewModel { get; init; }
-    /// <inheritdoc/>
+
+    public override (PremiseViewModel, string) NewViewModel(Premise dto)
+        => (PremiseViewModelFactory!.Create(_sessionViewModel, this, dto), string.Empty);
+
     public override async Task<(bool, string)> ReadAsync(bool forceload = false)
-    => await base.ReadAsync(forceload);
+        => await base.ReadAsync(forceload);
 
-    public async Task SeedPremises()
-    {
-        await ReadAsync(true);
-         if( ViewModels.Count == 0)
-        {
-            var premise = new Premise()
-            {
-                Id = Guid.NewGuid().ToString(),
-                Body = "Premise1"
-            };
-            var premiseViewModel = PremiseViewModelFactory!.Create(
-                _sessionViewModel,
-                this,
-                premise
-                );
-            premiseViewModel.State = LzItemViewModelState.New;
-            var result = await premiseViewModel.CreateAsync();
-
-            var premise2 = new Premise()
-            {
-                Id = Guid.NewGuid().ToString(),
-                Body = "Premise1"
-            };
-            var premiseViewModel2 = PremiseViewModelFactory!.Create(
-                _sessionViewModel,
-                this,
-                premise2
-                );
-            premiseViewModel2.State = LzItemViewModelState.New;
-            var result2 = await premiseViewModel2.CreateAsync();
-
-        }
-
-    }
 
 }

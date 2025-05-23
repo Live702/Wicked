@@ -23,7 +23,7 @@ public class BlurbViewModel : LzItemViewModelAuthNotifications<Blurb, BlurbModel
         PremisesViewModel = premisesViewModelFactory?.Create(sessionViewModel, this)
             ?? throw new ArgumentNullException(nameof(premisesViewModelFactory));
 
-        ChatsViewModel = chatsViewModelFactory?.Create(sessionViewModel, this)
+        ChatsViewModel = chatsViewModelFactory?.Create(sessionViewModel, blurbViewModel: this, premiseViewModel: null)
             ?? throw new ArgumentNullException(nameof(chatsViewModelFactory));
     }
     private ISessionViewModel _sessionViewModel;
