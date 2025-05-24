@@ -1,0 +1,112 @@
+@page "/BlurbItemPage"
+@page "/BlurbItemPage/{BlurbId}"
+@namespace BlazorUI
+@inherits LzComponentBaseAssignViewModel<BlurbViewModel>
+@inject ISessionsViewModel SessionsViewModel
+@inject NavigationManager NavigationManager
+@inject ILoggerFactory LoggerFactory
+@inject IPremisesViewModelFactory PremisesViewModelFactory
+@inject IChatsViewModelFactory ChatsViewModelFactory
+@using WickedSchema
+@using FluentValidation
+
+<h3>@(IsNew ? "Add Blurb" : "Edit Blurb")</h3>
+
+
+
+<MudCard>
+    <MudForm Model="@model" @ref="@form"
+             Validation="@( (Func<object, IEnumerable<string>>)(value => value is BlurbModel m ? blurbModelValidator.Validate(m).Errors.Select(e => e.ErrorMessage) : Enumerable.Empty<string>()) )"
+             ValidationDelay="0">
+        <MudCardContent>
+            <MudTextField @bind-Value="model.Name"
+                          For="@(() => model.Name)"
+                          Immediate="true"
+                          Label="Name" />
+        </MudCardContent>
+    </MudForm>
+    <MudCardActions>
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto" OnClick="@(async () => await SaveEditAsync())">@AddOrUpdateText</MudButton>
+        @if (!IsNew)
+        {
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto" OnClick="@(async () => await DeleteAsync())">Delete</MudButton>
+        }
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto" OnClick="@(async () => await CancelAsync())">Cancel</MudButton>
+    </MudCardActions>
+</MudCard>
+
+@code {
+    [Parameter]
+    public string? BlurbId { get; set; }
+    [Inject] ISnackbar? Snackbar { get; set; }
+
+    private MudForm? form;
+    private BlurbModel model => ViewModel!.Data!;
+    private LocalBlurbModelValidator blurbModelValidator = new LocalBlurbModelValidator();
+    private EditContext? editContext;
+    private BlurbsViewModel? blurbsViewModel;
+    private bool IsNew = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        blurbsViewModel = SessionsViewModel!.SessionViewModel!.BlurbsViewModel!;
+        if (!string.IsNullOrEmpty(BlurbId) && blurbsViewModel.ViewModels.ContainsKey(BlurbId))
+        {
+            ViewModel = blurbsViewModel.ViewModels[BlurbId];
+            IsNew = false;
+        }
+        else
+        {
+            // Create a new BlurbViewModel for adding
+            var blurb = new WickedSchema.Blurb();
+            blurb.Id = Guid.NewGuid().ToString();
+            blurb.Name = "";
+            ViewModel = new BlurbViewModel(LoggerFactory, PremisesViewModelFactory, ChatsViewModelFactory, SessionsViewModel!.SessionViewModel, blurbsViewModel, blurb);
+            ViewModel.State = LzItemViewModelState.New;
+            IsNew = true;
+        }
+        var (success, msg) = await ViewModel.OpenEditAsync();
+        if (!success)
+        {
+            Snackbar!.Add(msg, MudBlazor.Severity.Error);
+            NavigationManager.NavigateTo("BlurbItemsPage");
+        }
+        editContext = new EditContext(ViewModel!.Data!);
+        await base.OnInitializedAsync();
+    }
+
+    private string AddOrUpdateText => IsNew ? "Add" : "Update";
+
+    private async Task CancelAsync()
+    {
+        var (success, msg) = await ViewModel!.CancelEditAsync();
+        if (!success)
+            Snackbar!.Add(msg, MudBlazor.Severity.Error);
+
+        NavigationManager.NavigateTo("BlurbItemsPage");
+    }
+
+
+    private async Task DeleteAsync()
+    {
+        var (success, msg) = await ViewModel!.DeleteAsync();
+        if (!success)
+            Snackbar!.Add(msg, MudBlazor.Severity.Error);
+
+        NavigationManager.NavigateTo("BlurbItemsPage");
+    }
+
+    private async Task SaveEditAsync()
+    {
+        await form!.Validate();
+
+        if (!form.IsValid)
+            return;
+
+        var (success, msg) = await ViewModel!.SaveEditAsync();
+        if (!success)
+            Snackbar!.Add(msg, MudBlazor.Severity.Error);
+        else
+            NavigationManager.NavigateTo("BlurbItemsPage");
+    }
+} 

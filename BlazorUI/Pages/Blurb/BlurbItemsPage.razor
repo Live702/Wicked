@@ -64,14 +64,12 @@ else
 
     private void AddBlurb()
     {
-        ViewModel!.EditViewModel = null; // ensure a new BlurbViewModel is created
-        NavigationManager.NavigateTo("BlurbEditPage");
+        NavigationManager.NavigateTo("BlurbItemPage");
     }
 
     private void EditBlurb(BlurbModel blurbModel)
     {
-        var viewModel = ViewModel!.CurrentViewModel = ViewModel!.EditViewModel = ViewModel.ViewModels[blurbModel.Id];
-        NavigationManager.NavigateTo("BlurbEditPage");
+        NavigationManager.NavigateTo($"BlurbItemPage/{blurbModel.Id}");
     }
 
     private async Task DeleteBlurb(BlurbModel blurbModel)
