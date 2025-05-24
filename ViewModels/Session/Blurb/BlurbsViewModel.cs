@@ -15,15 +15,6 @@ public class BlurbsViewModel : LzItemsViewModelAuthNotifications<BlurbViewModel,
         _sessionViewModel = sessionViewModel;
         BlurbViewModelFactory = blurbViewModelFactory;
         _DTOReadListAsync = sessionViewModel.Public.ListBlurbsAsync;
-        //_DTODeleteAsync = sessionViewModel.Public.DeleteBlurbAsync;
-        /*
-        against wickedservice>dev-deo>8d636d91
-
-        investigating this error my prove instructive for understanding .net build issues
-        adding line 18, building causes numerous errors,
-        remving this line, erros persist, only in dotnet restore, dotnet clean, dotnet build works.
-        */
-
 
     }
     private ISessionViewModel _sessionViewModel;

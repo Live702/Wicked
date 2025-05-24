@@ -19,6 +19,7 @@ public class BlurbViewModel : LzItemViewModelAuthNotifications<Blurb, BlurbModel
         ParentViewModel = parentViewModel;
         _DTOReadAsync = sessionViewModel.Public.ReadBlurbByIdAsync;
         _DTOCreateAsync = sessionViewModel.Public.CreateBlurbAsync;
+        _DTODeleteAsync = sessionViewModel.Public.DeleteBlurbAsync;
 
         PremisesViewModel = premisesViewModelFactory?.Create(sessionViewModel, this)
             ?? throw new ArgumentNullException(nameof(premisesViewModelFactory));
