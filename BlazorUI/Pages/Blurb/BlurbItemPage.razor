@@ -69,7 +69,7 @@
         if (!success)
         {
             Snackbar!.Add(msg, MudBlazor.Severity.Error);
-            NavigationManager.NavigateTo("BlurbItemsPage");
+            NavigationManager.NavigateTo("/BlurbItemsPage");
         }
         editContext = new EditContext(ViewModel!.Data!);
         await base.OnInitializedAsync();
@@ -83,17 +83,34 @@
         if (!success)
             Snackbar!.Add(msg, MudBlazor.Severity.Error);
 
-        NavigationManager.NavigateTo("BlurbItemsPage");
+        NavigationManager.NavigateTo("/BlurbItemsPage");
     }
 
 
     private async Task DeleteAsync()
     {
-        var (success, msg) = await ViewModel!.DeleteAsync();
-        if (!success)
-            Snackbar!.Add(msg, MudBlazor.Severity.Error);
+        // Ensure state is Current before deleting
+        if (ViewModel.State == LzItemViewModelState.Edit)
+        {
+            var (cancelSuccess, cancelMsg) = await ViewModel.CancelEditAsync();
+            if (!cancelSuccess)
+            {
+                Snackbar!.Add(cancelMsg, MudBlazor.Severity.Error);
+                return;
+            }
+        }
 
-        NavigationManager.NavigateTo("BlurbItemsPage");
+        var (success, msg) = await ViewModel.DeleteAsync();
+        if (!success)
+        {
+            Snackbar!.Add(msg, MudBlazor.Severity.Error);
+        }
+        else
+        {
+            Snackbar!.Add("Blurb deleted successfully!", MudBlazor.Severity.Success);
+            await Task.Delay(750);
+            await InvokeAsync(() => NavigationManager.NavigateTo("/BlurbItemsPage"));
+        }
     }
 
     private async Task SaveEditAsync()
@@ -107,6 +124,6 @@
         if (!success)
             Snackbar!.Add(msg, MudBlazor.Severity.Error);
         else
-            NavigationManager.NavigateTo("BlurbItemsPage");
+            NavigationManager.NavigateTo("/BlurbItemsPage");
     }
 } 

@@ -68,12 +68,12 @@ else
 
     private void AddBlurb()
     {
-        NavigationManager.NavigateTo("BlurbItemPage");
+        NavigationManager.NavigateTo("/BlurbItemPage");
     }
 
     private void EditBlurb(BlurbModel blurbModel)
     {
-        NavigationManager.NavigateTo($"BlurbItemPage/{blurbModel.Id}");
+        NavigationManager.NavigateTo($"/BlurbItemPage/{blurbModel.Id}");
     }
 
     private async Task DeleteBlurb(BlurbModel blurbModel)
