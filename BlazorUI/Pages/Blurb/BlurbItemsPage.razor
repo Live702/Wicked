@@ -52,9 +52,13 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        ViewModel = SessionsViewModel!.SessionViewModel!.BlurbsViewModel;
+        if (SessionsViewModel.SessionViewModel == null)
+        {
+            await SessionsViewModel.CreateSessionAsync();
+        }
+        ViewModel = SessionsViewModel.SessionViewModel.BlurbsViewModel;
         ViewModel.Clear();
-        var (success, msg) = await ViewModel!.ReadAsync();
+        var (success, msg) = await ViewModel.ReadAsync();
         if (!success)
         {
             Snackbar!.Add(msg, MudBlazor.Severity.Error);
