@@ -79,10 +79,8 @@
 
     private async Task CancelAsync()
     {
+        ViewModel.State = LzItemViewModelState.Current;
         var (success, msg) = await ViewModel!.CancelEditAsync();
-        if (!success)
-            Snackbar!.Add(msg, MudBlazor.Severity.Error);
-
         NavigationManager.NavigateTo("/BlurbItemsPage");
     }
 
@@ -90,27 +88,11 @@
     private async Task DeleteAsync()
     {
         // Ensure state is Current before deleting
-        if (ViewModel.State == LzItemViewModelState.Edit)
-        {
-            var (cancelSuccess, cancelMsg) = await ViewModel.CancelEditAsync();
-            if (!cancelSuccess)
-            {
-                Snackbar!.Add(cancelMsg, MudBlazor.Severity.Error);
-                return;
-            }
-        }
-
+        ViewModel.State = LzItemViewModelState.Current;
         var (success, msg) = await ViewModel.DeleteAsync();
-        if (!success)
-        {
-            Snackbar!.Add(msg, MudBlazor.Severity.Error);
-        }
-        else
-        {
-            Snackbar!.Add("Blurb deleted successfully!", MudBlazor.Severity.Success);
-            await Task.Delay(750);
-            await InvokeAsync(() => NavigationManager.NavigateTo("/BlurbItemsPage"));
-        }
+        Snackbar!.Add("Blurb deleted successfully!", MudBlazor.Severity.Success);
+        await Task.Delay(750);
+        await InvokeAsync(() => NavigationManager.NavigateTo("/BlurbItemsPage"));
     }
 
     private async Task SaveEditAsync()

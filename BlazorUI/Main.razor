@@ -11,15 +11,14 @@
 @inject NavigationManager NavigationManager
 @inject ISessionsViewModel SessionsViewModel
 
-@if(ClientConfig.Configured)
+@using MudBlazor
+
+@if (isReady)
 {
     <Router AppAssembly="@typeof(Main).Assembly">
         <Found Context="routeData">
-            @if (ClientConfig.Configured)
-            {
-                <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
-                <FocusOnNavigate RouteData="@routeData" Selector="h1" />
-            }
+            <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
+            <FocusOnNavigate RouteData="@routeData" Selector="h1" />
         </Found>
         <NotFound>
             <PageTitle>Not found</PageTitle>
@@ -31,19 +30,19 @@
 }
 else
 {
-    <p>Loading Config</p>
-}   
+    <MudProgressCircular Indeterminate="true" Color="Color.Primary" Size="Size.Large" />
+    <MudText Typo="Typo.subtitle1" Class="mt-2">Loading application...</MudText>
+}
 
 @code {
-    private string tenancyHostUrl = string.Empty;
+    private bool isReady = false;
+
     protected override async Task OnInitializedAsync()
     {
-        if(!ClientConfig.Configured)
+        if (!ClientConfig.Configured)
         {
             try
             {
-                // We initialize the following because the DI container doens't have access
-                // to the JSRuntime until the first render in MAUI.
                 InternetConnectivity.SetJSRuntime(JSRuntime);
                 await InternetConnectivity.CheckInternetConnectivityAsync();
                 Messages.SetStaticAssets(staticAssets);
@@ -53,26 +52,30 @@ else
 
                 try
                 {
-                    // Read message files and set the default 
-                    Messages
-                        .AddBlazorUIMessages();
+                    Messages.AddBlazorUIMessages();
                     Messages.AssetsUrl = Host.AssetsUrl;
                     await Messages.SetMessageSetAsync("en-US", LzMessageUnits.Imperial);
-                } catch (Exception ex)
+                }
+                catch (Exception ex)
                 {
                     Console.WriteLine($"Messages.SetMessageSetAsync failed. {ex.Message} ");
-                } 
-                
+                }
+
                 Console.WriteLine("NavigationManager.BaseUri: " + NavigationManager.BaseUri);
-
-                //NavigationManager.NavigateTo("/");
-
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
             }
         }
+
+        if (SessionsViewModel.SessionViewModel == null)
+        {
+            await SessionsViewModel.CreateSessionAsync();
+        }
+
+        isReady = true;
+        StateHasChanged();
         await base.OnInitializedAsync();
     }
 

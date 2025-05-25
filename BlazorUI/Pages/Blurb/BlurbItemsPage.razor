@@ -8,7 +8,7 @@
 <h3>Blurbs</h3>
 @if (ViewModel!.IsLoading)
 {
-    <Busy />
+    <LzMLoading Message="Loading blurbs..." />
 }
 else
 {
@@ -52,10 +52,6 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        if (SessionsViewModel.SessionViewModel == null)
-        {
-            await SessionsViewModel.CreateSessionAsync();
-        }
         ViewModel = SessionsViewModel.SessionViewModel.BlurbsViewModel;
         ViewModel.Clear();
         var (success, msg) = await ViewModel.ReadAsync();
