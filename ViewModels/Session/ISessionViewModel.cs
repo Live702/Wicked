@@ -5,12 +5,9 @@ namespace ViewModels;
 
 public interface ISessionViewModel : ILzSessionViewModelAuthNotifications
 {
-    IConsumerApi Consumer { get; set; }
-    IPublicApi Public { get; set; } 
-    PetsViewModel PetsViewModel { get; set; }
-    CategoriesViewModel CategoriesViewModel { get; set; }
-    TagsViewModel TagsViewModel { get; set; }   
-    BlurbsViewModel BlurbsViewModel { get; }
 
+    IWickedAppApi WickedAppApi { get; set; } 
+    BlurbsViewModel BlurbsViewModel { get; }
+    UserChatsViewModel UserChatsViewModel { get; }
     public string TenantName { get; set; }
 }

@@ -16,9 +16,7 @@ public class SessionsViewModel : LzSessionsViewModelAuthNotifications<ISessionVi
         _sessionViewModelFactory = sessionViewModelFactory;
     }
     private ISessionViewModelFactory _sessionViewModelFactory;
-
     public JObject TenancyConfig { get; set; } = new JObject();
-
     public override ISessionViewModel CreateSessionViewModel()
     {
         return _sessionViewModelFactory.Create();

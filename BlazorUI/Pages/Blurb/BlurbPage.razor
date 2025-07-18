@@ -1,6 +1,5 @@
-@page "/BlurbItemPage"
-@page "/BlurbItemPage/{BlurbId}"
 @namespace BlazorUI
+@page "/BlurbPage"
 @inherits LzComponentBaseAssignViewModel<BlurbViewModel>
 @inject ISessionsViewModel SessionsViewModel
 @inject NavigationManager NavigationManager
@@ -11,8 +10,6 @@
 @using FluentValidation
 
 <h3>@(IsNew ? "Add Blurb" : "Edit Blurb")</h3>
-
-
 
 <MudCard>
     <MudForm Model="@model" @ref="@form"

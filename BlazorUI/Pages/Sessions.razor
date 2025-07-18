@@ -16,5 +16,33 @@
 *@
 
 @code {
-    // No per-page session/config initialization needed. All handled at root level.
+    private bool isBusy = false;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+
+        if (ClientConfig.Configured)
+        {
+            if (ViewModel!.SessionViewModel is null && !isBusy)
+            {
+                try
+                {
+                    isBusy = true;
+                    await ViewModel.CreateSessionAsync();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Sessions CreateSessionAsync failed. {ex.Message} ");
+                }
+                finally
+                {
+                    isBusy = false;
+                }
+            }
+            if (ViewModel!.SessionViewModel is not null)
+                NavigationManager.NavigateTo("HomePage");
+        }
+
+        await base.OnAfterRenderAsync(firstRender);
+    }
 }

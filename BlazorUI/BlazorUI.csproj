@@ -29,7 +29,9 @@
 	</ItemGroup>
 	
 	<ItemGroup>
-	  <Folder Include="Pages\Blurb\Premise\Chat\Message\" />
+	  <Folder Include="Pages\Blurb\Premise\" />
+	  <Folder Include="Pages\YourInput\" />
+	  <Folder Include="Pages\Profile\" />
 	</ItemGroup>
 
 </Project>

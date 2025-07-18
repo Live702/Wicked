@@ -13,8 +13,7 @@ public static class ConfigureViewModels
         services.AddSingleton<ILzClientConfig,LzClientConfig>();    
         services.AddLazyMagicAuthCognito();
         services.AddSingleton<ISessionsViewModel, SessionsViewModel>();
-        services.TryAddTransient<IConsumerApi, ConsumerApi.ConsumerApi>();
-        services.TryAddTransient<IPublicApi, PublicApi.PublicApi>();
+        services.TryAddTransient<IWickedAppApi, WickedAppApi.WickedAppApi>();
 
         return services;
     }

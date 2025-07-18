@@ -1,9 +1,83 @@
 ﻿@namespace BlazorUI
+@page "/BlurbsPage"
 @inherits LzComponentBaseAssignViewModel<BlurbsViewModel>
 @inject ISessionsViewModel SessionsViewModel
-<h3>BlurbsPage</h3>
+@inject NavigationManager NavigationManager
+
+@if (ViewModel!.IsLoading)
+{
+    <h1>"Loading blurbs..."</h1>
+}
+else
+{
+    <MudCard>
+        <MudCardHeader>
+            <CardHeaderContent>
+                <BlurbSearch ViewModel="@ViewModel" />
+            </CardHeaderContent>
+            <CardHeaderActions>
+                <MudIconButton Icon="@Icons.Material.Filled.Add" Color="Color.Default" OnClick="AddBlurb" />
+            </CardHeaderActions>
+        </MudCardHeader>
+        <MudCardContent>
+            <MudTable T="BlurbModel"
+                      Items="@ViewModel.ViewModels.Values.Select(x => x.Data)">
+                <HeaderContent>
+                    <MudTh>Name</MudTh>
+                </HeaderContent>
+
+                <RowTemplate>
+                    <MudTd>
+                        <MudIconButton Icon="@Icons.Material.Filled.ViewAgenda" Color="Color.Primary" OnClick="@(() => ViewBlurb(context))" />
+                    </MudTd>
+                    <MudTd DataLabel="Name">@context.Name</MudTd>
+
+                </RowTemplate>
+            </MudTable>
+        </MudCardContent>
+        <MudCardActions>
+            <MudButton Variant="Variant.Filled" Color="Color.Default" OnClick="BlurbsReloadAsync">Reload</MudButton>
+
+        </MudCardActions>
+    </MudCard>
+}
 
 @code {
+    [Inject] ISnackbar? Snackbar { get; set; }
+    private MudTable<BlurbModel> table = new MudTable<BlurbModel>();
 
+    protected override async Task OnInitializedAsync()
+    {
+        ViewModel = SessionsViewModel!.SessionViewModel!.BlurbsViewModel;
+        ViewModel.Clear();
+        var (success, msg) = await ViewModel.ReadAsync();
+        if (!success)
+        {
+            Snackbar!.Add(msg, MudBlazor.Severity.Error);
+        }
+        await base.OnInitializedAsync();
+    }
+
+    private void AddBlurb()
+    {
+
+
+        NavigationManager.NavigateTo("/BlurbCreatePage");
+    }
+
+    private void ViewBlurb(BlurbModel blurbModel)
+    {
+        NavigationManager.NavigateTo($"/BlurbItemPage/{blurbModel.Id}");
+    }
+
+
+    private async Task BlurbsReloadAsync()
+    {
+        var (success, msg) = await ViewModel!.ReadAsync();
+        if (!success)
+        {
+            Snackbar!.Add(msg, MudBlazor.Severity.Error);
+        }
+    }
 
 }

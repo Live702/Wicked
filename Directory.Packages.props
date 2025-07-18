@@ -20,7 +20,6 @@
 		<PackageVersion Include="LazyMagic.Shared" Version="1.4.0" />
 	</ItemGroup>
 	<ItemGroup>
-		<PackageVersion Include="ConsumerApi" Version="1.0.0" />
-		<PackageVersion Include="PublicApi" Version="1.0.0" />
+		<PackageVersion Include="WickedAppApi" Version="1.0.0" />
 	</ItemGroup>
 </Project>

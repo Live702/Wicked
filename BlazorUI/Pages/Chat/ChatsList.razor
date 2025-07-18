@@ -1,0 +1,91 @@
+﻿@namespace BlazorUI
+@inherits LzComponentBasePassViewModel<UserChatsViewModel>
+@inject NavigationManager NavigationManager
+@if (ViewModel!.IsLoading)
+{
+    <h1>"Loading chats..."</h1>
+}
+else
+{
+    <MudCard >
+        <MudCardHeader>
+            <CardHeaderActions>
+                <MudIconButton Icon="@Icons.Material.Filled.Add" Color="Color.Default" OnClick="AddChat" />
+            </CardHeaderActions>
+        </MudCardHeader>
+        <MudCardContent>
+            <MudTable T="ChatModel"
+                      Items="@ViewModel.ViewModels.Values.Select(x => x.Data)">
+                <HeaderContent>
+                    <MudTh>Actions</MudTh>
+                    <MudTh>Title</MudTh>
+                </HeaderContent>
+
+                <RowTemplate>
+                    <MudTd>
+                        <MudIconButton Icon="@Icons.Material.Filled.Edit" Color="Color.Primary" OnClick="@(() => EditChat(context))" />
+                        <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Primary" OnClick="@(() => DeleteChat(context))" />
+                    </MudTd>
+                    <MudTd DataLabel="Name">@context.Title</MudTd>
+                    @*                     <MudTd DataLabel="Created">@(context.CreateUtcTick != 0 ? DateTimeOffset.FromUnixTimeMilliseconds(context.CreateUtcTick).LocalDateTime.ToString() : "N/A")</MudTd>
+                    <MudTd DataLabel="Updated">@(context.UpdateUtcTick != 0 ? DateTimeOffset.FromUnixTimeMilliseconds(context.UpdateUtcTick).LocalDateTime.ToString() : "N/A")</MudTd> *@
+                </RowTemplate>
+            </MudTable>
+        </MudCardContent>
+        <MudCardActions>
+            <MudButton Variant="Variant.Filled" Color="Color.Default" OnClick="ChatsReloadAsync">Reload</MudButton>
+        </MudCardActions>
+    </MudCard>
+}
+
+@code {
+    [Inject] ISnackbar? Snackbar { get; set; }
+    private MudTable<ChatModel> table = new MudTable<ChatModel>();
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        if(ViewModel!.ViewModels.Count == 0)
+        {
+            var (success, msg) = await ViewModel.ReadAsync();
+            if (!success)
+            {
+                Snackbar!.Add(msg, MudBlazor.Severity.Error);
+            }
+            return;
+        }
+        await base.OnInitializedAsync();
+    }
+
+    private void AddChat()
+    {
+        ViewModel!.EditViewModel = null; // ensure a new chat is created
+        NavigationManager.NavigateTo("ChatEditPage");
+    }
+
+    private void EditChat(ChatModel chat)
+    {
+        var viewModel = ViewModel!.CurrentViewModel = ViewModel!.EditViewModel = ViewModel.ViewModels[chat.Id];
+        NavigationManager.NavigateTo("ChatEditPage");
+    }
+
+    private async Task DeleteChat(ChatModel chat)
+    {
+        var viewModel = ViewModel!.ViewModels[chat.Id];
+        var (success, msg) = await viewModel.DeleteAsync();
+        if (!success)
+        {
+            Snackbar!.Add(msg, MudBlazor.Severity.Error);
+        }
+    }
+
+    private async Task ChatsReloadAsync()
+    {
+        var (success, msg) = await ViewModel!.ReadAsync();
+        if (!success)
+        {
+            Snackbar!.Add(msg, MudBlazor.Severity.Error);
+        }
+    }
+
+}

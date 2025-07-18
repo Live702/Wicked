@@ -17,10 +17,10 @@ public class BlurbViewModel : LzItemViewModelAuthNotifications<Blurb, BlurbModel
     {
         _sessionViewModel = sessionViewModel;
         ParentViewModel = parentViewModel;
-        _DTOReadAsync = sessionViewModel.Public.ReadBlurbByIdAsync;
-        _DTOCreateAsync = sessionViewModel.Public.CreateBlurbAsync;
-        _DTODeleteAsync = sessionViewModel.Public.DeleteBlurbAsync;
-        _DTOUpdateAsync = sessionViewModel.Public.UpdateBlurbAsync;
+        _DTOReadAsync = sessionViewModel.WickedAppApi.ReadBlurbByIdAsync;
+        _DTOCreateAsync = sessionViewModel.WickedAppApi.CreateBlurbAsync;
+        _DTODeleteAsync = sessionViewModel.WickedAppApi.DeleteBlurbAsync;
+        _DTOUpdateAsync = sessionViewModel.WickedAppApi.UpdateBlurbAsync;
 
         PremisesViewModel = premisesViewModelFactory?.Create(sessionViewModel, this)
             ?? throw new ArgumentNullException(nameof(premisesViewModelFactory));

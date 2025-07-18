@@ -15,17 +15,15 @@ public class PremisesViewModel : LzItemsViewModelAuthNotifications<PremiseViewMo
     {
         _sessionViewModel = sessionViewModel;
         PremiseViewModelFactory = premiseViewModelFactory;
-        _DTOReadListIdAsync = sessionViewModel.Public.ListPremisesByBlurbIdAsync;
+        _DTOReadListIdAsync = sessionViewModel.WickedAppApi.ListPremisesByBlurbIdAsync;
 
         BlurbViewModel = blurbViewModel;
     }
     private ISessionViewModel _sessionViewModel;
     public IPremiseViewModelFactory? PremiseViewModelFactory { get; init; }
     public BlurbViewModel BlurbViewModel { get; init; }
-
     public override (PremiseViewModel, string) NewViewModel(Premise dto)
         => (PremiseViewModelFactory!.Create(_sessionViewModel, this, dto), string.Empty);
-
     public override async Task<(bool, string)> ReadAsync(bool forceload = false)
         => await base.ReadAsync(forceload);
 

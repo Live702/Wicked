@@ -15,9 +15,9 @@ public class PremiseViewModel : LzItemViewModelAuthNotifications<Premise, Premis
     {
         _sessionViewModel = sessionViewModel;
         ParentViewModel = parentViewModel;
-        _DTOReadAsync = sessionViewModel.Public.ReadPremiseByIdAsync;
-        _DTOCreateAsync = sessionViewModel.Public.CreatePremiseAsync;
-        _DTOUpdateAsync = sessionViewModel.Public.UpdatePremiseAsync;
+        _DTOReadAsync = sessionViewModel.WickedAppApi.ReadPremiseByIdAsync;
+        _DTOCreateAsync = sessionViewModel.WickedAppApi.CreatePremiseAsync;
+        _DTOUpdateAsync = sessionViewModel.WickedAppApi.UpdatePremiseAsync;
 
         ChatsViewModel = chatsViewModelFactory?.Create(sessionViewModel, blurbViewModel: null, premiseViewModel: this)
             ?? throw new ArgumentNullException(nameof(chatsViewModelFactory));

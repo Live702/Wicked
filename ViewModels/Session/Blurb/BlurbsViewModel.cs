@@ -8,27 +8,21 @@ using WickedSchema;
 public class BlurbsViewModel : LzItemsViewModelAuthNotifications<BlurbViewModel, Blurb, BlurbModel>
 {
     public BlurbsViewModel(
-    [FactoryInject] ILoggerFactory loggerFactory,
-    ISessionViewModel sessionViewModel,
-    [FactoryInject] IBlurbViewModelFactory blurbViewModelFactory) : base(loggerFactory, sessionViewModel)
+        [FactoryInject] ILoggerFactory loggerFactory,
+        ISessionViewModel sessionViewModel,
+        [FactoryInject] IBlurbViewModelFactory blurbViewModelFactory) : base(loggerFactory, sessionViewModel)
     {
         _sessionViewModel = sessionViewModel;
         BlurbViewModelFactory = blurbViewModelFactory;
-        _DTOReadListAsync = sessionViewModel.Public.ListBlurbsAsync;
-
+        _DTOReadListAsync = sessionViewModel.WickedAppApi.ListBlurbsAsync;
     }
     private ISessionViewModel _sessionViewModel;
     public IBlurbViewModelFactory? BlurbViewModelFactory { get; init; }
-
     public override (BlurbViewModel, string) NewViewModel(Blurb dto)
         => (BlurbViewModelFactory!.Create(_sessionViewModel, this, dto), string.Empty);
-
     public override async Task<(bool, string)> ReadAsync(bool forceload = false)
     {
         var result = await base.ReadAsync(forceload);
         return result;
     }
-
-
-    /// <inheritdoc/>
 }

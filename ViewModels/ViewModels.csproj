@@ -20,8 +20,11 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="ConsumerApi" />
-		<PackageReference Include="PublicApi" />		
+		<PackageReference Include="WickedAppApi" />		
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Session\Blurb\Premise\Chat\Message\" />
 	</ItemGroup>
 
 </Project>

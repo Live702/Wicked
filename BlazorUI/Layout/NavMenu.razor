@@ -7,12 +7,13 @@
 @if(ViewModel != null)
 {
     <MudNavMenu>
-        <MudNavLink Href="HomePage" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Home">Home</MudNavLink>
-        @if(ViewModel!.IsSignedIn)
+        <MudNavLink Href="/" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Home">Home</MudNavLink>
+        @if (ViewModel!.IsSignedIn)
         {
-            <MudNavLink Href="PetsPage" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Pets">Pets</MudNavLink>
+            <MudNavLink Href="/BlurbsPage" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Article">Blurbs</MudNavLink>
+            <MudNavLink Href="/ChatsPage" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Chat">Your Input</MudNavLink>
+            <MudNavLink Href="/ProfilePage" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.VerifiedUser">Profile</MudNavLink>
         }
-        <MudNavLink Href="/BlurbItemsPage" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Article">BlurbItems</MudNavLink>
     </MudNavMenu>
 } 
 

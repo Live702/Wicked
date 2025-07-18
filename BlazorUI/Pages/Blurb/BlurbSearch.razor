@@ -1,0 +1,16 @@
+﻿@namespace BlazorUI
+@inherits LzComponentBasePassViewModel<BlurbsViewModel>
+<MudTextField @bind-Value="@searchText" 
+              Placeholder="Search blurbs..." 
+              Adornment="Adornment.Start" 
+              Class="mb-4" 
+              Immediate="true"
+              DebounceInterval="500" 
+              AdornmentIcon="@Icons.Material.Filled.Search" 
+              AdornmentColor="Color.Secondary" />
+
+@code {
+
+    private string searchText = string.Empty;
+
+}

@@ -1,11 +1,10 @@
 ﻿using LazyMagic.Client.FactoryGenerator;
-using WickedSchema;
 
 namespace ViewModels;
 [Factory]
-public class ChatViewModel : LzItemViewModelAuthNotifications<Chat, ChatModel>
+public class UserChatViewModel : LzItemViewModelAuthNotifications<Chat, ChatModel>
 {
-    public ChatViewModel(
+    public UserChatViewModel(
     [FactoryInject] ILoggerFactory loggerFactory,
     ISessionViewModel sessionViewModel,
     ILzParentViewModel parentViewModel,

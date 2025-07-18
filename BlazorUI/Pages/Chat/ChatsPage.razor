@@ -1,0 +1,20 @@
+﻿@namespace BlazorUI
+@page "/ChatsPage"
+@inherits LzComponentBaseAssignViewModel<UserChatsViewModel>
+@inject ISessionsViewModel SessionsViewModel
+@inject NavigationManager NavigationManager
+
+<ChatsList ViewModel="@ViewModel" />
+
+@code {
+    [Inject] ISnackbar? Snackbar { get; set; }
+    private MudTable<ChatModel> table = new MudTable<ChatModel>();
+
+    private bool _chatsOpen = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        ViewModel = SessionsViewModel!.SessionViewModel!.UserChatsViewModel;
+        await base.OnInitializedAsync();
+    }
+}
