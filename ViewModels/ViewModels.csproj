@@ -9,18 +9,12 @@
 	</PropertyGroup>
 	
 	<ItemGroup>
-		<TrimmerRootAssembly Include="LazyMagic.Shared" />
-	</ItemGroup>	
-	
-	<ItemGroup>
-		<PackageReference Include="LazyMagic.Client.Auth.Cognito" />
 		<PackageReference Include="LazyMagic.Client.FactoryGenerator" PrivateAssets="all" />
-		<PackageReference Include="LazyMagic.Client.ViewModels.Auth.Notifications" />
-		<PackageReference Include="LazyMagic.Shared" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="WickedAppApi" />		
+		<PackageReference Include="WickedAppApi" />
+		<PackageReference Include="BaseApp.ViewModels" />
 	</ItemGroup>
 
 	<ItemGroup>

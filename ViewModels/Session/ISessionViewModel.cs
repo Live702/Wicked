@@ -3,7 +3,7 @@ using System.ComponentModel;
 
 namespace ViewModels;
 
-public interface ISessionViewModel : ILzSessionViewModelAuthNotifications
+public interface ISessionViewModel : IBaseAppSessionViewModelAuthNotifications
 {
 
     IWickedAppApi WickedAppApi { get; set; } 

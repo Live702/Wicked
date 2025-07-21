@@ -5,37 +5,40 @@
 @inject HttpClient HttpClient
 @inject ILzClientConfig ClientConfig
 @inject IOSAccess OSAccess
-@inject IBlazorInternetConnectivity InternetConnectivity
+@inject IConnectivityService ConnectivityService
 @inject ILzMessages Messages
-@inject IBaseAppJS BaseAppJS    
+@inject ILzJsUtilities LzJsUtilities
 @inject NavigationManager NavigationManager
 @inject ISessionsViewModel SessionsViewModel
+@inject BrowserFingerprintService BrowserFingerprintService
 
 @using MudBlazor
 
-@if (isReady)
-{
-    <Router AppAssembly="@typeof(Main).Assembly">
-        <Found Context="routeData">
+<Router AppAssembly="@typeof(Main).Assembly">
+    <Found Context="routeData">
+        @if (ClientConfig.Configured)
+        {
             <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
             <FocusOnNavigate RouteData="@routeData" Selector="h1" />
-        </Found>
-        <NotFound>
-            <PageTitle>Not found</PageTitle>
-            <LayoutView Layout="@typeof(MainLayout)">
-                <p role="alert">Sorry, there's nothing at this address. @NavigationManager.Uri</p>
-            </LayoutView>
-        </NotFound>
-    </Router>
-}
-else
-{
-    <MudProgressCircular Indeterminate="true" Color="Color.Primary" Size="Size.Large" />
-    <MudText Typo="Typo.subtitle1" Class="mt-2">Loading application...</MudText>
-}
+        }
+        else
+        {
+            <div style="width: 9rem; height: 9rem; margin-left: 1rem; margin-top: 1rem;">
+                <LzAppLoading AnimationDurationSeconds="1.0"
+                                LoadingMessage="Loading your venue." />
+            </div>
+        }
+    </Found>
+    <NotFound>
+        <PageTitle>Not found</PageTitle>
+        <LayoutView Layout="@typeof(MainLayout)">
+            <p role="alert">Sorry, there's nothing at this address. @NavigationManager.Uri</p>
+        </LayoutView>
+    </NotFound>
+</Router>
+
 
 @code {
-    private bool isReady = false;
 
     protected override async Task OnInitializedAsync()
     {
@@ -43,12 +46,13 @@ else
         {
             try
             {
-                InternetConnectivity.SetJSRuntime(JSRuntime);
-                await InternetConnectivity.CheckInternetConnectivityAsync();
+                await ConnectivityService.InitializeAsync(JSRuntime);
                 Messages.SetStaticAssets(staticAssets);
-                BaseAppJS.SetJSRuntime(JSRuntime);
-                await BaseAppJS.Initialize();
+                LzJsUtilities.SetJSRuntime(JSRuntime);
+                await LzJsUtilities.Initialize();
                 await ClientConfig.InitializeAsync(Host.AssetsUrl);
+                BrowserFingerprintService.SetJSRuntime(JSRuntime);
+                await SessionsViewModel!.TenantConfigViewModel!.ReadAsync("subtenancy/base/System/tenantconfig.json");
 
                 try
                 {
@@ -74,7 +78,6 @@ else
             await SessionsViewModel.CreateSessionAsync();
         }
 
-        isReady = true;
         StateHasChanged();
         await base.OnInitializedAsync();
     }

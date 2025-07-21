@@ -1,4 +1,6 @@
-﻿global using LazyMagic.Client.Base;
+﻿global using BlazorUI; 
+global using BaseApp.ViewModels;
+global using LazyMagic.Client.Base;
 global using LazyMagic.Blazor;
 global using Microsoft.AspNetCore.Components;
 global using Microsoft.Extensions.DependencyInjection;

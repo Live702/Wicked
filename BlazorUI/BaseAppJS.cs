@@ -2,15 +2,16 @@
 
 namespace BlazorUI;
 
-public class BaseAppJS : LzBaseJSModule, IBaseAppJS
+public class BaseAppJS : LzBaseJSModule, ILzJsUtilities
 {
-    private DotNetObjectReference<BaseAppJS>? viewerInstance;
+    private DotNetObjectReference<BaseAppJS> viewerInstance;
     // ModuleFileName is the path to the JS file that will be loaded by the Blazor app.
-    public override string ModuleFileName => $"./_content/BlazorUI/baseapp.js";
+    public override string ModuleFileName => $"./_content/BaseApp.BlazorUI/baseapp.js";
 
-    
+
     private bool _checkingAssetData;
-    public bool CheckingAssetData { 
+    public bool CheckingAssetData
+    {
         get => _checkingAssetData;
         set => this.RaiseAndSetIfChanged(ref _checkingAssetData, value);
     }
@@ -21,11 +22,17 @@ public class BaseAppJS : LzBaseJSModule, IBaseAppJS
         set => this.RaiseAndSetIfChanged(ref _updatingAssetData, value);
     }
     private bool _updatingServiceWorker;
-    public bool UpdatingServiceWorker {
+    public bool UpdatingServiceWorker
+    {
         get => _updatingServiceWorker;
         set => this.RaiseAndSetIfChanged(ref _updatingServiceWorker, value);
-    }   
-
+    }
+    private string _cacheMiss = "";
+    public string CacheMiss
+    {
+        get => _cacheMiss;
+        set => this.RaiseAndSetIfChanged(ref _cacheMiss, value);
+    }
     public override void SetJSRuntime(object jsRuntime)
     {
         base.SetJSRuntime(jsRuntime);
@@ -33,7 +40,7 @@ public class BaseAppJS : LzBaseJSModule, IBaseAppJS
     }
 
     public virtual async ValueTask Initialize()
-        => await InvokeSafeVoidAsync("initialize", viewerInstance!);
+        => await InvokeSafeVoidAsync("initialize", viewerInstance);
     public virtual async ValueTask CheckForNewAssetData()
         => await InvokeSafeVoidAsync("checkForNewAssetData");
     public async ValueTask Reload()
@@ -47,7 +54,7 @@ public class BaseAppJS : LzBaseJSModule, IBaseAppJS
     public virtual async ValueTask<string> GetBase64ImageDownsized(object img)
         => await InvokeSafeAsync<string>("getBase64ImageDownsized", (ElementReference)img);
     public virtual async ValueTask<bool> SharePng(string title, string text, string pngData, string? textData = null)
-        => await InvokeSafeAsync<bool>("sharePng", title, text, pngData, textData!);
+        => await InvokeSafeAsync<bool>("sharePng", title, text, pngData, textData);
     public virtual async ValueTask<bool> ShareText(string title, string text)
         => await InvokeSafeAsync<bool>("shareText", title, text);
     public async ValueTask SetItem(string key, string value)
@@ -94,6 +101,12 @@ public class BaseAppJS : LzBaseJSModule, IBaseAppJS
         Console.WriteLine("BaseAppJS.ServiceWorkerUpdateComplete");
         UpdatingServiceWorker = false;
     }
+    [JSInvokable]
+    public void CacheMissAction(string url)
+    {
+        Console.WriteLine($"BaseAppJS.CacheMiss: {url}");
+        CacheMiss = url;
+    }
 
     [JSInvokable]
     public void MessageSelected(string key, string value)
@@ -101,7 +114,7 @@ public class BaseAppJS : LzBaseJSModule, IBaseAppJS
         Console.WriteLine($"BaseAppJS.MessageSelected: {key} = {value}");
     }
 
-    protected bool RaiseAndSetIfChanged<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
+    protected bool RaiseAndSetIfChanged<T>(ref T field, T value, [CallerMemberName] string propertyName = null)
     {
         if (EqualityComparer<T>.Default.Equals(field, value)) return false;
         field = value;
